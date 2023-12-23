@@ -1,10 +1,17 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'mdj';
+    title = 'mdj';
+
+    constructor(private router: Router) {}
+
+    public moveToDiaryPage() {
+        this.router.navigate(['/diary']);
+    }
 }
