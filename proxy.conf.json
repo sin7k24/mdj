@@ -1,6 +1,6 @@
 {
-    "/md2html": {
+    "/api/v1": {
       "target": "http://localhost:3000",
-      "pathRewrite": {"^/md2html": "md2html"}
+      "pathRewrite": {"^/api/v1": "/api/v1"}
     }
   }

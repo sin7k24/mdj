@@ -1,19 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
-.navbar a{
+.navbar a {
     display: block;
 }
 
-@import 'prismjs/themes/prism-okaidia.css';
-
+@import "prismjs/themes/prism-okaidia.css";
 
 body {
-    padding: 10px;
-    font-family: 'YuGothic', 'Yu Gothic', sans-serif;
+    padding: 3px;
+    font-family: "MS Pゴシック", "Meiryo", "YuGothic", "Yu Gothic", sans-serif;
+
+    h1 {
+        font-size: 24px;
+    }
+    h2 {
+        font-size: 20px;
+    }
+    h3 {
+        font-size: 16px;
+    }
+    p {
+        font-size: 16px;
+    }
 }
 
 pre {
     color: white;
-    background: black;
-	white-space: pre-wrap;
-    padding: 10px;
+    background: #272822;
+    white-space: pre-wrap;
+    padding: 12px;
+    border-radius: 0.3em;
+}
+
+code {
+    font-family: Consolas, Menlo, Monaco, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Meiryo, monospace !important;
+    font-size: 14px !important;
+    
 }
