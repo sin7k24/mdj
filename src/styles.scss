@@ -2,3 +2,18 @@
 .navbar a{
     display: block;
 }
+
+@import 'prismjs/themes/prism-okaidia.css';
+
+
+body {
+    padding: 10px;
+    font-family: 'YuGothic', 'Yu Gothic', sans-serif;
+}
+
+pre {
+    color: white;
+    background: black;
+	white-space: pre-wrap;
+    padding: 10px;
+}

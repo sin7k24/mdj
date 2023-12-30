@@ -1,0 +1,6 @@
+{
+    "/md2html": {
+      "target": "http://localhost:3000",
+      "pathRewrite": {"^/md2html": "md2html"}
+    }
+  }
