@@ -6,6 +6,8 @@ import { EditPageComponent } from './edit-page/edit-page.component';
 
 const routes: Routes = [
   {path: "diary", component: DiaryPageComponent},
+  {path: "diary/:year", component: DiaryPageComponent},
+  {path: "diary/:year/:month", component: DiaryPageComponent},
   {path: "search", component: SearchPageComponent},
   {path: "edit", component: EditPageComponent}
 ];

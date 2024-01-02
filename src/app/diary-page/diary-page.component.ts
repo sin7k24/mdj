@@ -9,6 +9,7 @@ import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-sass';
 import 'prismjs/components/prism-scss';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-diary-page',
@@ -18,16 +19,27 @@ import 'prismjs/components/prism-scss';
 export class DiaryPageComponent {
     html: string;
 
-    constructor(private http: HttpClient) {
+    apiUrl: string = 'api/v1/md2html';
+
+    constructor(private http: HttpClient, private route: ActivatedRoute) {
         this.html = '';
     }
 
     ngOnInit() {
-        console.log('日記をフェッチ');
-
-        this.http.get('api/v1/md2html', { responseType: 'text' }).subscribe((html) => {
-            this.html = html;
-        });
+        const year = this.route.snapshot.paramMap.get('year');
+        const month = this.route.snapshot.paramMap.get('month');
+        if (year) {
+            this.apiUrl += '/' + year;
+            if (month) {
+                this.apiUrl += '/' + month;
+            }
+        }
+        this.apiUrl + year && year;
+        this.http
+            .get(this.apiUrl, { responseType: 'text' })
+            .subscribe((html) => {
+                this.html = html;
+            });
     }
 
     ngAfterViewChecked() {

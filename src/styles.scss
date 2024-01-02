@@ -26,7 +26,7 @@ body {
 pre {
     color: white;
     background: #272822;
-    white-space: pre-wrap;
+    white-space: pre-wrap !important;
     padding: 12px;
     border-radius: 0.3em;
 }
@@ -35,5 +35,5 @@ code {
     font-family: Consolas, Menlo, Monaco, -apple-system, BlinkMacSystemFont,
         "Segoe UI", Meiryo, monospace !important;
     font-size: 14px !important;
-    
+    white-space: pre-wrap !important;
 }
