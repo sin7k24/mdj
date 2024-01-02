@@ -9,6 +9,7 @@ import { DiaryComponent } from './diary/diary.component';
 import { MarkedPipe } from './marked.pipe';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { EditPageComponent } from './edit-page/edit-page.component';
     DiaryComponent,
     MarkedPipe,
     SearchPageComponent,
-    EditPageComponent
+    EditPageComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,

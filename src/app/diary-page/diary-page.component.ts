@@ -6,6 +6,7 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-java';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-markup';
+import 'prismjs/components/prism-markdown';
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-sass';
 import 'prismjs/components/prism-scss';
