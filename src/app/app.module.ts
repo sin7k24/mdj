@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DiaryPageComponent } from './diary-page/diary-page.component';
 import { DiaryComponent } from './diary/diary.component';
-import { MarkedPipe } from './marked.pipe';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
 import { CalendarComponent } from './calendar/calendar.component';
@@ -16,7 +15,6 @@ import { CalendarComponent } from './calendar/calendar.component';
     AppComponent,
     DiaryPageComponent,
     DiaryComponent,
-    MarkedPipe,
     SearchPageComponent,
     EditPageComponent,
     CalendarComponent

@@ -22,20 +22,25 @@ export class DiaryPageComponent {
 
     apiUrl: string = 'api/v1/md2html';
 
+    year: string;
+
+    month: string;
+
     constructor(private http: HttpClient, private route: ActivatedRoute) {
         this.html = '';
+        this.year = '';
+        this.month = '';
     }
 
     ngOnInit() {
-        const year = this.route.snapshot.paramMap.get('year');
-        const month = this.route.snapshot.paramMap.get('month');
-        if (year) {
-            this.apiUrl += '/' + year;
-            if (month) {
-                this.apiUrl += '/' + month;
+        this.year = this.route.snapshot.paramMap.get('year') || '';
+        this.month = this.route.snapshot.paramMap.get('month') || '';
+        if (this.year) {
+            this.apiUrl += '/' + this.year;
+            if (this.month) {
+                this.apiUrl += '/' + this.month;
             }
         }
-        this.apiUrl + year && year;
         this.http
             .get(this.apiUrl, { responseType: 'text' })
             .subscribe((html) => {

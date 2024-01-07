@@ -1,17 +1,17 @@
 <div class="calendar">
-    <div class="calendar_head">
+    <div class="calendar__header">
         <a href="">先月</a>
-        <div class="year_and_month">
+        <div class="calendar__year-and-month">
             <select>
-                <option>2023</option>
+                <option>{{ year }}</option>
             </select>
             <select>
-                <option>01</option>
+                <option>{{ month }}</option>
             </select>
         </div>
         <a href="">次月</a>
     </div>
-    <div class="day_of_week">
+    <!-- <div class="calendar__day-of-week">
         <div>日</div>
         <div>月</div>
         <div>火</div>
@@ -19,8 +19,14 @@
         <div>木</div>
         <div>金</div>
         <div>土</div>
+    </div> -->
+
+    <div #calendarContainer class="calendar__container">
+
     </div>
-    <div class="week">
+
+
+    <!-- <div class="week">
         <div></div>
         <div></div>
         <div>
@@ -77,7 +83,7 @@
         <div><span>31</span></div>
         <div></div>
         <div></div>
-    </div>
+    </div> -->
 </div>
 月日記数 [31] 年日記数 [365] 総日記数 [6032]
 
