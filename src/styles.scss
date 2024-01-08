@@ -7,16 +7,23 @@
 
 body {
     padding: 3px;
-    font-family: "MS Pゴシック", "Meiryo", "YuGothic", "Yu Gothic", sans-serif;
+    font-family: "Meiryo", "YuGothic", "Yu Gothic", sans-serif;
 
     h1 {
         font-size: 24px;
     }
     h2 {
         font-size: 20px;
+        padding: 0.4em 0.5em;
+        background: #f4f4f4;
+        border-left: solid 5px #0066ff;
+        border-bottom: solid 3px #d7d7d7;
+        border-top: solid 3px #d7d7d7;
     }
     h3 {
         font-size: 16px;
+        display: inline-block;
+        border-bottom: solid 2px #3e3e3e;
     }
     p {
         font-size: 16px;
@@ -37,3 +44,5 @@ code {
     font-size: 14px !important;
     white-space: pre-wrap !important;
 }
+
+
