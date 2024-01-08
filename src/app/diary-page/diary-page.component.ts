@@ -20,6 +20,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class DiaryPageComponent {
     html: string;
 
+    // apiUrl: string = '../mdj-server/api/v1/md2html';
     apiUrl: string = 'api/v1/md2html';
 
     year: string;

@@ -1,10 +1,4 @@
-import {
-    Component,
-    ElementRef,
-    Input,
-    Renderer2,
-    ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'app-calendar',
@@ -23,17 +17,9 @@ export class CalendarComponent {
     ngAfterViewInit() {
         const calendar = this.calendarContainer.nativeElement;
 
-        const firstDayOfWeek = new Date(
-            Number(this.year),
-            Number(this.month) - 1,
-            1
-        ).getDay();
+        const firstDayOfWeek = new Date(Number(this.year), Number(this.month) - 1, 1).getDay();
 
-        const lastDate = new Date(
-            Number(this.year),
-            Number(this.month),
-            0
-        ).getDate();
+        const lastDate = new Date(Number(this.year), Number(this.month), 0).getDate();
 
         const days = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -47,30 +33,41 @@ export class CalendarComponent {
         }
 
         let columnNum = 0;
-        for (let i = 0; i < firstDayOfWeek; i++) {
-            const dayDiv = this.renderer.createElement('div');
-            this.renderer.addClass(dayDiv, 'calendar__day');
-            this.renderer.appendChild(calendar, dayDiv);
-            columnNum++;
-        }
 
-        for (let i = 1; i <= lastDate; i++) {
+        // previouse month days
+        for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+            const date = new Date(Number(this.year), Number(this.month) - 1, -i).getDate();
             const dayDiv = this.renderer.createElement('div');
-            this.renderer.addClass(dayDiv, 'calendar__day');
+            this.renderer.addClass(dayDiv, 'calendar__other-month-day');
             const dateSpan = this.renderer.createElement('span');
-            const dateText = this.renderer.createText(i.toString());
+            const dateText = this.renderer.createText(date.toString());
             this.renderer.appendChild(dateSpan, dateText);
             this.renderer.appendChild(dayDiv, dateSpan);
             this.renderer.appendChild(calendar, dayDiv);
             columnNum++;
         }
 
-        const nextMonthLeft = 7 - (columnNum % 7);
-        console.log(columnNum);
-        console.log("next", nextMonthLeft);
-        for (let i = 1; i <= nextMonthLeft; i++) {
+        // monthly days
+        for (let i = 1; i <= lastDate; i++) {
             const dayDiv = this.renderer.createElement('div');
             this.renderer.addClass(dayDiv, 'calendar__day');
+            this.renderer.setAttribute(dayDiv, 'id', `overview-${this.year}${this.month}${("0" + i).slice(-2)}`);
+            const dateSpan = this.renderer.createElement('span');
+            const dateText = this.renderer.createText(i.toString());
+            this.renderer.appendChild(dateSpan, dateText);
+            this.renderer.appendChild(dayDiv, dateSpan);
+
+            const overviewDiv = this.renderer.createElement('div');
+            this.renderer.appendChild(dayDiv, overviewDiv);
+            this.renderer.appendChild(calendar, dayDiv);
+            columnNum++;
+        }
+
+        // next month days
+        const nextMonthLeft = 7 - (columnNum % 7);
+        for (let i = 1; i <= nextMonthLeft; i++) {
+            const dayDiv = this.renderer.createElement('div');
+            this.renderer.addClass(dayDiv, 'calendar__other-month-day');
             const dateSpan = this.renderer.createElement('span');
             const dateText = this.renderer.createText(i.toString());
             this.renderer.appendChild(dateSpan, dateText);
@@ -80,5 +77,19 @@ export class CalendarComponent {
 
         console.log(firstDayOfWeek, lastDate);
         console.log(this.year, this.month);
+
+        this.appendOverview("20231103", "hogehogehogehogehogehogehogehogehogehoge");
+        this.appendOverview("20231103", "ほげほげほげほげほげほげほげほげほげほげほげ");
+
+    }
+
+    private appendOverview(yyyymmdd: string, str: string) {
+        const overviewDiv = this.calendarContainer.nativeElement.querySelector(`#overview-${yyyymmdd} div`)
+        const overviewP = this.renderer.createElement('p');
+        const overviewText = this.renderer.createText(str);
+
+        overviewP.appendChild(overviewText);
+        overviewDiv.appendChild(overviewP);
     }
 }
+

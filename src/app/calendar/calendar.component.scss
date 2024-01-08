@@ -19,7 +19,6 @@
         }
     }
 
-
     .calendar__container {
         display: flex;
         flex-wrap: wrap;
@@ -45,25 +44,6 @@
                 top: 0px;
                 right: 10px;
             }
-
-        }
-    }
-
-    .week {
-        display: flex;
-        div {
-            position: relative;
-            width: calc(100% / 7);
-            height: 80px;
-            border: 1px solid #ddd;
-            span {
-                position: absolute;
-                font-size: 12px;
-                font-weight: bold;
-                color: #3e3e3e;
-                top: 0px;
-                right: 10px;
-            }
             div {
                 width: 100%;
                 margin-top: 20px;
@@ -76,6 +56,22 @@
                     text-overflow: ellipsis;
                     overflow: hidden;
                 }
+            }
+        }
+
+        .calendar__other-month-day {
+            width: 14.1%;
+            height: 80px;
+            border: 1px solid #ddd;
+            padding: 0px;
+            position: relative;
+            span {
+                position: absolute;
+                font-size: 12px;
+                font-weight: bold;
+                color: #bebebe;
+                top: 0px;
+                right: 10px;
             }
         }
     }
