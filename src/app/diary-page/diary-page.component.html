@@ -1,4 +1,4 @@
-<app-calendar [year]="year" [month]="month"></app-calendar>
+<app-calendar (yearAndMonthChanged)="fetchDiary($event)"></app-calendar>
 
 <!-- <app-diary></app-diary> -->
 

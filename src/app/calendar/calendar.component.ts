@@ -1,4 +1,5 @@
-import { Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'app-calendar',
@@ -6,13 +7,43 @@ import { Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/cor
     styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent {
-    @Input() year!: string;
-
-    @Input() month!: string;
-
     @ViewChild('calendarContainer') calendarContainer!: ElementRef;
 
-    constructor(private renderer: Renderer2) {}
+    @Output() yearAndMonthChanged = new EventEmitter();
+
+    // selected year
+    year!: string;
+
+    // selected month
+    month!: string;
+
+    // selectable year list
+    years!: string[];
+
+    constructor(private http: HttpClient, private renderer: Renderer2) {}
+
+    ngOnInit() {
+        // TODO: enable config
+        const firstYear = 2005;
+
+        this.years = [];
+        const date = new Date();
+        for (let i = date.getFullYear(); i >= firstYear; i--) {
+            this.years.push(i.toString());
+        }
+
+        // this.year = date.getFullYear().toString();
+        // this.month = (date.getMonth()+1).toString();
+        this.year = '2023';
+        this.month = '12';
+
+        this.yearAndMonthChanged.emit({ year: this.year, month: this.month });
+
+        // this.http.get('api/v1/years', { responseType: 'json' }).subscribe((json: any) => {
+        //     console.log(json.years);
+        //     this.years = json.years;
+        // });
+    }
 
     ngAfterViewInit() {
         const calendar = this.calendarContainer.nativeElement;
@@ -34,7 +65,7 @@ export class CalendarComponent {
 
         let columnNum = 0;
 
-        // previouse month days
+        // render previouse month days
         for (let i = firstDayOfWeek - 1; i >= 0; i--) {
             const date = new Date(Number(this.year), Number(this.month) - 1, -i).getDate();
             const dayDiv = this.renderer.createElement('div');
@@ -47,11 +78,11 @@ export class CalendarComponent {
             columnNum++;
         }
 
-        // monthly days
+        // render monthly days
         for (let i = 1; i <= lastDate; i++) {
             const dayDiv = this.renderer.createElement('div');
             this.renderer.addClass(dayDiv, 'calendar__day');
-            this.renderer.setAttribute(dayDiv, 'id', `overview-${this.year}${this.month}${("0" + i).slice(-2)}`);
+            this.renderer.setAttribute(dayDiv, 'id', `overview-${this.year}${this.month}${('0' + i).slice(-2)}`);
             const dateSpan = this.renderer.createElement('span');
             const dateText = this.renderer.createText(i.toString());
             this.renderer.appendChild(dateSpan, dateText);
@@ -63,7 +94,7 @@ export class CalendarComponent {
             columnNum++;
         }
 
-        // next month days
+        // render next month days
         const nextMonthLeft = 7 - (columnNum % 7);
         for (let i = 1; i <= nextMonthLeft; i++) {
             const dayDiv = this.renderer.createElement('div');
@@ -78,18 +109,24 @@ export class CalendarComponent {
         console.log(firstDayOfWeek, lastDate);
         console.log(this.year, this.month);
 
-        this.appendOverview("20231103", "hogehogehogehogehogehogehogehogehogehoge");
-        this.appendOverview("20231103", "ほげほげほげほげほげほげほげほげほげほげほげ");
-
+        // this.appendOverview("20231103", "hogehogehogehogehogehogehogehogehogehoge");
+        // this.appendOverview("20231103", "ほげほげほげほげほげほげほげほげほげほげほげ");
     }
 
     private appendOverview(yyyymmdd: string, str: string) {
-        const overviewDiv = this.calendarContainer.nativeElement.querySelector(`#overview-${yyyymmdd} div`)
+        const overviewDiv = this.calendarContainer.nativeElement.querySelector(`#overview-${yyyymmdd} div`);
         const overviewP = this.renderer.createElement('p');
         const overviewText = this.renderer.createText(str);
 
         overviewP.appendChild(overviewText);
         overviewDiv.appendChild(overviewP);
     }
-}
 
+    changeCalender() {
+        console.log(this.year, this.month);
+        this.calendarContainer.nativeElement.innerHTML = '';
+        this.ngAfterViewInit();
+
+        this.yearAndMonthChanged.emit({ year: this.year, month: this.month });
+    }
+}

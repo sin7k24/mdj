@@ -34,22 +34,30 @@ export class DiaryPageComponent {
     }
 
     ngOnInit() {
-        this.year = this.route.snapshot.paramMap.get('year') || '';
-        this.month = this.route.snapshot.paramMap.get('month') || '';
-        if (this.year) {
-            this.apiUrl += '/' + this.year;
-            if (this.month) {
-                this.apiUrl += '/' + this.month;
-            }
-        }
-        this.http
-            .get(this.apiUrl, { responseType: 'text' })
-            .subscribe((html) => {
-                this.html = html;
-            });
+        // this.year = this.route.snapshot.paramMap.get('year') || '';
+        // this.month = this.route.snapshot.paramMap.get('month') || '';
+        // let api = this.apiUrl;
+        // if (this.year) {
+        //     api += '/' + this.year;
+        //     if (this.month) {
+        //         api += '/' + this.month;
+        //     }
+        // }
+        // this.http.get(api, { responseType: 'text' }).subscribe((html) => {
+        //     this.html = html;
+        // });
     }
 
     ngAfterViewChecked() {
         prism.highlightAll();
+    }
+
+    fetchDiary(e: any) {
+        console.log(e);
+        const api = this.apiUrl + '/' + e.year + '/' + e.month;
+        this.http.get(api, { responseType: 'text' }).subscribe((html) => {
+            this.html = html;
+        });
+
     }
 }

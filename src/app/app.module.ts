@@ -9,22 +9,19 @@ import { DiaryComponent } from './diary/diary.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    DiaryPageComponent,
-    DiaryComponent,
-    SearchPageComponent,
-    EditPageComponent,
-    CalendarComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        DiaryPageComponent,
+        DiaryComponent,
+        SearchPageComponent,
+        EditPageComponent,
+        CalendarComponent,
+    ],
+    imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
+    providers: [],
+    bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
