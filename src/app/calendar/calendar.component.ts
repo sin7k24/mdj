@@ -1,10 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild, SimpleChanges } from '@angular/core';
+import { DiaryInfo } from '../diary-page/diary-page.component';
 
-export interface Overviews {
-    yyyymmdd: string
-    headings: string[]
-}
 
 @Component({
     selector: 'app-calendar',
@@ -16,7 +13,7 @@ export class CalendarComponent {
 
     @Output() yearAndMonthChanged = new EventEmitter();
 
-    @Input() overviews!: Overviews[];
+    @Input() diaryInfos!: DiaryInfo[];
 
     // selected year
     year!: string;
@@ -24,7 +21,7 @@ export class CalendarComponent {
     // selected month
     month!: string;
 
-    // selectable year list
+    // selectable years list
     years!: string[];
 
     constructor(private http: HttpClient, private renderer: Renderer2) {
@@ -32,16 +29,13 @@ export class CalendarComponent {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log(changes);
-        console.log("changes['overviews'].currentValue", changes['overviews'].currentValue);
 
-        for(let current of changes['overviews'].currentValue) {
-            console.log("current", current);
-            for(let c of current.headings) {
-            this.appendOverview(current.yyyymmdd, c);
+        for (let current of changes['diaryInfos'].currentValue) {
+            console.log('current', current);
+            for (let c of current.headings) {
+                this.appendOverview(current.date, c);
             }
         }
-
     }
 
     ngOnInit() {
@@ -74,7 +68,7 @@ export class CalendarComponent {
 
         const lastDate = new Date(Number(this.year), Number(this.month), 0).getDate();
 
-        const days = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
+        const days = ['日', '月', '火', '水', '木', '金', '土'];
 
         // render day of week
         for (let day of days) {
@@ -108,7 +102,9 @@ export class CalendarComponent {
             this.renderer.setAttribute(
                 dayDiv,
                 'onclick',
-                `window.scrollTo({top: document.getElementById(${this.year}${this.month}${('0' + i).slice(-2)}).getBoundingClientRect().top, behavior: "smooth"})`
+                `window.scrollTo({top: document.getElementById(${this.year}${this.month}${('0' + i).slice(
+                    -2
+                )}).getBoundingClientRect().top, behavior: "smooth"})`
             );
             const dateSpan = this.renderer.createElement('span');
             const dateText = this.renderer.createText(i.toString());

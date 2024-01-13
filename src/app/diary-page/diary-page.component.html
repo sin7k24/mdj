@@ -1,7 +1,5 @@
-<app-calendar [overviews]="overview" (yearAndMonthChanged)="fetchDiary($event)"></app-calendar>
+<app-calendar [diaryInfos]="diaryInfos" (yearAndMonthChanged)="fetchDiary($event)"></app-calendar>
 
-<app-diary *ngFor="let diary of diaries" [diary]="diary"></app-diary>
-
-<!-- <div [innerHTML]="html"></div> -->
+<app-diary *ngFor="let diaryInfo of diaryInfos" [diaryInfo]="diaryInfo"></app-diary>
 
 月日記数 [31] 年日記数 [365] 総日記数 [6032]

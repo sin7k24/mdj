@@ -1,3 +1,3 @@
-<h1 id="{{ year }}{{ month }}{{ day }}">{{ year }}年{{ month }}月{{ day }}日（{{ dow }}）</h1>
+<h1 id="{{ diaryInfo.date }}">{{ diaryInfo.year }}年{{ diaryInfo.month }}月{{ diaryInfo.day }}日（{{ diaryInfo.dow }}）</h1>
 
-<div [innerHTML]="diary"></div>
+<div [innerHTML]="diaryInfo.diary"></div>

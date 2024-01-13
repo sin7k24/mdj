@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
+import { DiaryInfo } from '../diary-page/diary-page.component';
 
 @Component({
     selector: 'app-diary',
@@ -6,25 +7,12 @@ import { Component, Input, SimpleChanges } from '@angular/core';
     styleUrls: ['./diary.component.scss'],
 })
 export class DiaryComponent {
-    @Input() diary!: string;
-
-    year!: string;
-
-    month!: string;
-
-    day!: string;
-
-    dow!: string;
+    @Input() diaryInfo!: DiaryInfo;
 
     ngOnChanges(changes: SimpleChanges) {
         // console.log(changes);
-        const html: string = changes['diary'].currentValue;
+        const diaryInfo: DiaryInfo = changes['diaryInfo'].currentValue;
         // console.log(html);
 
-        const result: RegExpMatchArray = html.match(/<diary year="(\d{4})" month="(\d{2})" day="(\d{2})" dow="(.)"/)!;
-        this.year = result[1];
-        this.month = result[2];
-        this.day = result[3];
-        this.dow = result[4];
     }
 }
