@@ -69,7 +69,11 @@
             border: 1px solid #ddd;
             padding: 0px;
             position: relative;
+            cursor: pointer;
             span {
+                display: block;
+                // width: 100%;
+                // border-bottom: 2px solid #0066ff;
                 position: absolute;
                 font-size: 12px;
                 font-weight: bold;
@@ -81,8 +85,11 @@
                 width: 100%;
                 margin-top: 20px;
                 border: 0px;
+                overflow-y: hidden;
+                height: 60px;
                 p {
                     font-size: 10px;
+                    // font-weight: bold;
                     padding: 0px;
                     margin: 0px;
                     white-space: nowrap;

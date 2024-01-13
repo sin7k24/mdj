@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild, SimpleChanges } from '@angular/core';
+import { DiaryInfo } from '../diary-page/diary-page.component';
+
 
 @Component({
     selector: 'app-calendar',
@@ -11,16 +13,30 @@ export class CalendarComponent {
 
     @Output() yearAndMonthChanged = new EventEmitter();
 
+    @Input() diaryInfos!: DiaryInfo[];
+
     // selected year
     year!: string;
 
     // selected month
     month!: string;
 
-    // selectable year list
+    // selectable years list
     years!: string[];
 
-    constructor(private http: HttpClient, private renderer: Renderer2) {}
+    constructor(private http: HttpClient, private renderer: Renderer2) {
+        // this.overviews = [];
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+
+        for (let current of changes['diaryInfos'].currentValue) {
+            console.log('current', current);
+            for (let c of current.headings) {
+                this.appendOverview(current.date, c);
+            }
+        }
+    }
 
     ngOnInit() {
         // TODO: enable config
@@ -33,7 +49,7 @@ export class CalendarComponent {
         }
 
         // this.year = date.getFullYear().toString();
-        // this.month = (date.getMonth()+1).toString();
+        // this.month = "0" + (date.getMonth()+1).toString().slice(-2);
         this.year = '2023';
         this.month = '12';
 
@@ -83,6 +99,13 @@ export class CalendarComponent {
             const dayDiv = this.renderer.createElement('div');
             this.renderer.addClass(dayDiv, 'calendar__day');
             this.renderer.setAttribute(dayDiv, 'id', `overview-${this.year}${this.month}${('0' + i).slice(-2)}`);
+            this.renderer.setAttribute(
+                dayDiv,
+                'onclick',
+                `window.scrollTo({top: document.getElementById(${this.year}${this.month}${('0' + i).slice(
+                    -2
+                )}).getBoundingClientRect().top, behavior: "smooth"})`
+            );
             const dateSpan = this.renderer.createElement('span');
             const dateText = this.renderer.createText(i.toString());
             this.renderer.appendChild(dateSpan, dateText);
@@ -106,8 +129,8 @@ export class CalendarComponent {
             this.renderer.appendChild(calendar, dayDiv);
         }
 
-        console.log(firstDayOfWeek, lastDate);
-        console.log(this.year, this.month);
+        // console.log(firstDayOfWeek, lastDate);
+        // console.log(this.year, this.month);
 
         // this.appendOverview("20231103", "hogehogehogehogehogehogehogehogehogehoge");
         // this.appendOverview("20231103", "ほげほげほげほげほげほげほげほげほげほげほげ");
