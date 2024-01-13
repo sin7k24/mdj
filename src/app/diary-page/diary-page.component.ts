@@ -11,6 +11,7 @@ import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-sass';
 import 'prismjs/components/prism-scss';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Overviews } from '../calendar/calendar.component';
 
 @Component({
     selector: 'app-diary-page',
@@ -23,14 +24,21 @@ export class DiaryPageComponent {
     // apiUrl: string = '../mdj-server/api/v1/md2html';
     apiUrl: string = 'api/v1/md2html';
 
-    year: string;
+    // year: string;
 
-    month: string;
+    // month: string;
+
+    diaries: string[];
+
+    overview: Overviews[];
 
     constructor(private http: HttpClient, private route: ActivatedRoute) {
         this.html = '';
-        this.year = '';
-        this.month = '';
+        // this.year = '';
+        // this.month = '';
+        this.diaries = [];
+
+        this.overview = [];
     }
 
     ngOnInit() {
@@ -57,7 +65,26 @@ export class DiaryPageComponent {
         const api = this.apiUrl + '/' + e.year + '/' + e.month;
         this.http.get(api, { responseType: 'text' }).subscribe((html) => {
             this.html = html;
-        });
 
+            // console.log(html.split(/(?<=<\/diary>)/g));
+            this.diaries = html.split(/(?<=<\/diary>)/g);
+
+            const overviews = [];
+            for (let diary of this.diaries) {
+                let result: RegExpMatchArray = diary.match(/<h2>(.*?)<\/h2>/g)!;
+                // console.log(diary);
+                console.log('result', result);
+                const headings = result.map((s) => {
+                    return s.replace('<h2>', '').replace('</h2>', '');
+                });
+
+                const result2: RegExpMatchArray = diary.match(
+                    /<diary year="(\d{4})" month="(\d{2})" day="(\d{2})" dow="(.)"/
+                )!;
+                console.log(result2[1] + result2[2] + result2[3]);
+                overviews.push({ yyyymmdd: result2[1] + result2[2] + result2[3], headings: headings });
+            }
+            this.overview = overviews;
+        });
     }
 }

@@ -1,5 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild, SimpleChanges } from '@angular/core';
+
+export interface Overviews {
+    yyyymmdd: string
+    headings: string[]
+}
 
 @Component({
     selector: 'app-calendar',
@@ -11,6 +16,8 @@ export class CalendarComponent {
 
     @Output() yearAndMonthChanged = new EventEmitter();
 
+    @Input() overviews!: Overviews[];
+
     // selected year
     year!: string;
 
@@ -20,7 +27,22 @@ export class CalendarComponent {
     // selectable year list
     years!: string[];
 
-    constructor(private http: HttpClient, private renderer: Renderer2) {}
+    constructor(private http: HttpClient, private renderer: Renderer2) {
+        // this.overviews = [];
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        console.log(changes);
+        console.log("changes['overviews'].currentValue", changes['overviews'].currentValue);
+
+        for(let current of changes['overviews'].currentValue) {
+            console.log("current", current);
+            for(let c of current.headings) {
+            this.appendOverview(current.yyyymmdd, c);
+            }
+        }
+
+    }
 
     ngOnInit() {
         // TODO: enable config
@@ -33,7 +55,7 @@ export class CalendarComponent {
         }
 
         // this.year = date.getFullYear().toString();
-        // this.month = (date.getMonth()+1).toString();
+        // this.month = "0" + (date.getMonth()+1).toString().slice(-2);
         this.year = '2023';
         this.month = '12';
 
@@ -52,7 +74,7 @@ export class CalendarComponent {
 
         const lastDate = new Date(Number(this.year), Number(this.month), 0).getDate();
 
-        const days = ['日', '月', '火', '水', '木', '金', '土'];
+        const days = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
 
         // render day of week
         for (let day of days) {
@@ -83,6 +105,11 @@ export class CalendarComponent {
             const dayDiv = this.renderer.createElement('div');
             this.renderer.addClass(dayDiv, 'calendar__day');
             this.renderer.setAttribute(dayDiv, 'id', `overview-${this.year}${this.month}${('0' + i).slice(-2)}`);
+            this.renderer.setAttribute(
+                dayDiv,
+                'onclick',
+                `window.scrollTo({top: document.getElementById(${this.year}${this.month}${('0' + i).slice(-2)}).getBoundingClientRect().top, behavior: "smooth"})`
+            );
             const dateSpan = this.renderer.createElement('span');
             const dateText = this.renderer.createText(i.toString());
             this.renderer.appendChild(dateSpan, dateText);
@@ -106,8 +133,8 @@ export class CalendarComponent {
             this.renderer.appendChild(calendar, dayDiv);
         }
 
-        console.log(firstDayOfWeek, lastDate);
-        console.log(this.year, this.month);
+        // console.log(firstDayOfWeek, lastDate);
+        // console.log(this.year, this.month);
 
         // this.appendOverview("20231103", "hogehogehogehogehogehogehogehogehogehoge");
         // this.appendOverview("20231103", "ほげほげほげほげほげほげほげほげほげほげほげ");
