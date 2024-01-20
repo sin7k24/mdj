@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild, SimpleChanges } from '@angular/core';
 import { DiaryInfo } from '../diary-page/diary-page.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,12 +25,10 @@ export class CalendarComponent {
     // selectable years list
     years!: string[];
 
-    constructor(private http: HttpClient, private renderer: Renderer2) {
-        // this.overviews = [];
+    constructor(private http: HttpClient, private renderer: Renderer2, private router: Router) {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-
         for (let current of changes['diaryInfos'].currentValue) {
             console.log('current', current);
             for (let c of current.headings) {
@@ -48,10 +47,8 @@ export class CalendarComponent {
             this.years.push(i.toString());
         }
 
-        // this.year = date.getFullYear().toString();
-        // this.month = "0" + (date.getMonth()+1).toString().slice(-2);
-        this.year = '2023';
-        this.month = '12';
+        this.year = date.getFullYear().toString();
+        this.month = "0" + (date.getMonth()+1).toString().slice(-2);
 
         this.yearAndMonthChanged.emit({ year: this.year, month: this.month });
 
@@ -138,6 +135,7 @@ export class CalendarComponent {
 
     private appendOverview(yyyymmdd: string, str: string) {
         const overviewDiv = this.calendarContainer.nativeElement.querySelector(`#overview-${yyyymmdd} div`);
+        this.renderer.addClass(overviewDiv.parentNode, 'calendar__day--fill');
         const overviewP = this.renderer.createElement('p');
         const overviewText = this.renderer.createText(str);
 
@@ -151,5 +149,23 @@ export class CalendarComponent {
         this.ngAfterViewInit();
 
         this.yearAndMonthChanged.emit({ year: this.year, month: this.month });
+        // this.router.navigate([`diary/${this.year}/${this.month}`]);
+    }
+
+    prevMonth() {
+        const prev = new Date(Number(this.year), Number(this.month) - 2);
+        this.year = prev.getFullYear().toString();
+        this.month= ("0" + (prev.getMonth() + 1)).slice(-2);
+
+        this.changeCalender();
+    }
+
+    nextMonth() {
+        const next = new Date(Number(this.year), Number(this.month));
+        this.year = next.getFullYear().toString();
+        this.month= ("0" + (next.getMonth() + 1)).slice(-2);
+
+        this.changeCalender();
+
     }
 }

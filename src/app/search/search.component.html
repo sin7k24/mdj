@@ -1,0 +1,7 @@
+<input type="text" [(ngModel)]="words" (keypress)="search($event)" />
+
+{{ results.length }}
+<div *ngFor="let result of results">
+    {{ result.file }}
+    {{ result.hit }}
+</div>

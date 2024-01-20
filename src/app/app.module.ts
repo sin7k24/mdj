@@ -10,6 +10,7 @@ import { SearchPageComponent } from './search-page/search-page.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { FormsModule } from '@angular/forms';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
     declarations: [
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
         SearchPageComponent,
         EditPageComponent,
         CalendarComponent,
+        SearchComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
     providers: [],

@@ -30,49 +30,70 @@ export class DiaryPageComponent {
     // apiUrl: string = '../mdj-server/api/v1/md2html';
     apiUrl: string = 'api/v1/md2html';
 
-    // array of diary information per day 
+    // array of diary information per day
     diaryInfos: DiaryInfo[];
 
-    constructor(private http: HttpClient, private route: ActivatedRoute) {
+    constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
         this.diaryInfos = [];
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        // this.router.events.subscribe((value)=>{
+        //     console.log(value);
+        //     const param = {
+        //         year: this.route.snapshot.paramMap.get('year') || '',
+        //         month: this.route.snapshot.paramMap.get('month') || '',
+        //     };
+        //     this.fetchDiary(param);
+        // });
+    }
 
     ngAfterViewChecked() {
         prism.highlightAll();
     }
 
     fetchDiary(param: any) {
+        console.log(param);
         const api = this.apiUrl + '/' + param.year + '/' + param.month;
-        this.http.get(api, { responseType: 'text' }).subscribe((html) => {
 
-            // TODO: can't work regex back ref in safari
-            // divide diaries per day
-            const diaries = html.split(/(?<=<\/diary>)/g);
+        this.http.get(api, { responseType: 'text' }).subscribe({
+            next: (html) => {
+                // TODO: can't work regex back ref in safari
+                // divide diaries per day
+                const diaries = html.split(/(?<=<\/diary>)/g);
 
-            const diaryInfos: DiaryInfo[] = [];
-            for (let diary of diaries) {
-                // find headings per day
-                const regexHeadings: RegExpMatchArray = diary.match(/<h2>.*?<\/h2>/g)!;
-                const headings = regexHeadings.map((s) => {
-                    return s.replace('<h2>', '').replace('</h2>', '');
-                });
+                const diaryInfos: DiaryInfo[] = [];
+                for (let diary of diaries) {
+                    // find headings per day
+                    const regexHeadings: RegExpMatchArray = diary.match(/<h2>.*?<\/h2>/g)!;
+                    let headings: string[] = [];
+                    if (regexHeadings) {
+                        headings = regexHeadings.map((s) => {
+                            return s.replace('<h2>', '').replace('</h2>', '');
+                        });
+                    } else {
+                        headings.push(' ');
+                    }
 
-                // identify the date
-                const regexDate = diary.match(/<diary year="(\d{4})" month="(\d{2})" day="(\d{2})" dow="(.)"/)!;
-                const diaryInfo: DiaryInfo = {
-                    date: regexDate[1] + regexDate[2] + regexDate[3],
-                    year: regexDate[1],
-                    month: regexDate[2],
-                    day: regexDate[3],
-                    dow: regexDate[4],
-                    headings: headings,
-                    diary: diary,
-                };
-                diaryInfos.push(diaryInfo);
-            }
-            this.diaryInfos = diaryInfos;
+                    // identify the date
+                    const regexDate = diary.match(/<diary year="(\d{4})" month="(\d{2})" day="(\d{2})" dow="(.)"/)!;
+                    const diaryInfo: DiaryInfo = {
+                        date: regexDate[1] + regexDate[2] + regexDate[3],
+                        year: regexDate[1],
+                        month: regexDate[2],
+                        day: regexDate[3],
+                        dow: regexDate[4],
+                        headings: headings,
+                        diary: diary,
+                    };
+                    diaryInfos.push(diaryInfo);
+                }
+                this.diaryInfos = diaryInfos;
+            },
+            error: (err) => {
+                console.log('エラー！！！', err);
+                this.diaryInfos = [];
+            },
         });
     }
 }
