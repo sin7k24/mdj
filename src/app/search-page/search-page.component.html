@@ -1,2 +1,10 @@
-<p>search-page works!</p>
-<app-search></app-search>
+<app-search (searchCompleted)="results = $event"></app-search>
+
+<ng-container *ngIf="results.length > 0">
+    検索結果：{{ results.length }}件見つかりました。
+    <div *ngFor="let result of results">
+        <hr/>
+        <h1>{{ result.file }}</h1>
+        <div>{{ result.hit }}</div>
+    </div>
+</ng-container>

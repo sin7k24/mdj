@@ -1,3 +1,4 @@
+<app-header></app-header>
 <app-calendar [diaryInfos]="diaryInfos" (yearAndMonthChanged)="fetchDiary($event)"></app-calendar>
 
 <ng-container *ngIf="diaryInfos.length > 0">

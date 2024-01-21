@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
     selector: 'app-search',
@@ -9,11 +9,10 @@ import { Component } from '@angular/core';
 export class SearchComponent {
     words: string;
 
-    results: any;
+    @Output() searchCompleted = new EventEmitter();
 
     constructor(private http: HttpClient) {
         this.words = '';
-        this.results = [];
     }
 
     search(event: KeyboardEvent) {
@@ -25,7 +24,7 @@ export class SearchComponent {
             };
             this.http.post('api/v1/grep', body).subscribe((result) => {
                 console.log(result);
-                this.results = result;
+                this.searchCompleted.emit(result);
             });
         }
     }
