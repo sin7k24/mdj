@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SearchService } from '../search/search.service';
 
 @Component({
     selector: 'app-search-page',
@@ -8,7 +9,18 @@ import { Component } from '@angular/core';
 export class SearchPageComponent {
     results: any;
 
-    constructor() {
+    constructor(private searchService: SearchService) {
         this.results = [];
+    }
+
+    ngOnInit() {
+        this.searchService.resultChanged.subscribe((next)=>{
+            console.log(next);
+            this.results = next;
+        });
+    }
+
+    jump(file: string) {
+        console.log(file);
     }
 }

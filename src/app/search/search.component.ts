@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Output } from '@angular/core';
+import { SearchService } from './search.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-search',
@@ -11,21 +13,18 @@ export class SearchComponent {
 
     @Output() searchCompleted = new EventEmitter();
 
-    constructor(private http: HttpClient) {
+    constructor(private router: Router, private searchService: SearchService) {
         this.words = '';
     }
+
+    ngOnInit() {}
 
     search(event: KeyboardEvent) {
         console.log(event);
         if (event.key === 'Enter') {
             console.log('sosin');
-            const body = {
-                words: this.words,
-            };
-            this.http.post('api/v1/grep', body).subscribe((result) => {
-                console.log(result);
-                this.searchCompleted.emit(result);
-            });
+            this.router.navigate(['search']);
+            this.searchService.search(this.words);
         }
     }
 }

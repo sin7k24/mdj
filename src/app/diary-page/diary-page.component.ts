@@ -10,7 +10,7 @@ import 'prismjs/components/prism-markdown';
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-sass';
 import 'prismjs/components/prism-scss';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 export interface DiaryInfo {
     date: string;
@@ -27,33 +27,50 @@ export interface DiaryInfo {
     styleUrls: ['./diary-page.component.scss'],
 })
 export class DiaryPageComponent {
+    // nginxで動確用
     // apiUrl: string = '../mdj-server/api/v1/md2html';
     apiUrl: string = 'api/v1/md2html';
 
     // array of diary information per day
     diaryInfos: DiaryInfo[];
 
+    // year path parameter
+    year = '';
+
+    // month path parameter
+    month = '';
+
     constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
         this.diaryInfos = [];
     }
 
     ngOnInit() {
-        // this.router.events.subscribe((value)=>{
-        //     console.log(value);
-        //     const param = {
-        //         year: this.route.snapshot.paramMap.get('year') || '',
-        //         month: this.route.snapshot.paramMap.get('month') || '',
-        //     };
-        //     this.fetchDiary(param);
+        this.year = this.route.snapshot.paramMap.get('year') || '';
+        this.month = this.route.snapshot.paramMap.get('month') || '';
+
+        console.log('DiaryPageComponent#ngOnInit 1', this.year, this.month);
+        // this.router.events.subscribe((value) => {
+        //     if (value instanceof NavigationEnd) {
+        //         // console.log(value);
+        //         const param = {
+        //             year: this.route.snapshot.paramMap.get('year') || '',
+        //             month: this.route.snapshot.paramMap.get('month') || '',
+        //         };
+        //         this.year = param.year;
+        //         this.month = param.month;
+        //         console.log('DiaryPageComponent#ngOnInit 2', this.year, this.month);
+        //         // this.fetchDiary({year: this.year, month: this.month});
+        //     }
         // });
     }
 
     ngAfterViewChecked() {
+        console.log("DiaryPageComponent#ngAfterViewChecked()", this.year, this.month);
         prism.highlightAll();
     }
 
     fetchDiary(param: any) {
-        console.log(param);
+        console.log('DiaryPageComponent#fetchDiary', param);
         const api = this.apiUrl + '/' + param.year + '/' + param.month;
 
         this.http.get(api, { responseType: 'text' }).subscribe({
