@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild, SimpleChanges } from '@angular/core';
 import { DiaryInfo } from '../diary-page/diary-page.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Component({
     selector: 'app-calendar',
@@ -9,73 +9,54 @@ import { Router } from '@angular/router';
     styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent {
+    // nginxで動確用
+    // apiUrl: string = '../mdj-server/api/v1/md2html';
+    apiUrl: string = 'api/v1/md2html';
+
     @ViewChild('calendarContainer') calendarContainer!: ElementRef;
 
-    @Output() yearAndMonthChanged = new EventEmitter();
-
-    @Input() diaryInfos!: DiaryInfo[];
+    @Output() diaryFetched = new EventEmitter();
 
     // selected year
-    @Input() year!: string;
+    year!: string;
 
     // selected month
-    @Input() month!: string;
+    month!: string;
 
     // selectable years list
     years!: string[];
 
-    constructor(private http: HttpClient, private renderer: Renderer2, private router: Router) {}
-
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['diaryInfos']) {
-            console.log('CalendarComponent#ngOnOnChanges 1', changes);
-            for (let current of changes['diaryInfos'].currentValue) {
-                // console.log('current', current);
-                for (let c of current.headings) {
-                    this.appendOverview(current.date, c);
-                }
-            }
-        }
-
-        if (changes['year'] || changes['month']) {
-            console.log('CalendarComponent#ngOnOnChanges 2', this.year, this.month);    
-            // this.ngOnInit();
-
-            // setTimeout(()=>{
-            //     this.changeCalender();
-
-            //     // this.calendarContainer.nativeElement.innerHTML = '';
-            //     // this.ngAfterViewInit();
-            //     // this.yearAndMonthChanged.emit({ year: this.year, month: this.month });
-
-            // });
-        }
+    constructor(
+        private http: HttpClient,
+        private renderer: Renderer2,
+        private route: ActivatedRoute,
+        private router: Router
+    ) {
+        this.years = [];
     }
 
     ngOnInit() {
         // TODO: enable config
         const firstYear = 2005;
-
-        this.years = [];
         const now = new Date();
-
         // years list
         for (let i = now.getFullYear(); i >= firstYear; i--) {
             this.years.push(i.toString());
         }
 
+        // Get path parameter from ActivatedRoute
+        this.year = this.route.snapshot.paramMap.get('year') || '';
+        this.month = this.route.snapshot.paramMap.get('month') || '';
         console.log('CalendarComponent#ngOnInit', this.year, this.month);
 
+        // If year and month were not specified
         this.year = this.year.length == 0 ? now.getFullYear().toString() : this.year;
         this.month = this.month.length == 0 ? '0' + (now.getMonth() + 1).toString().slice(-2) : this.month;
 
         console.log('CalendarComponent#ngOnInit 2', this.year, this.month);
-        this.yearAndMonthChanged.emit({ year: this.year, month: this.month });
-
-        // this.http.get('api/v1/years', { responseType: 'json' }).subscribe((json: any) => {
-        //     console.log(json.years);
-        //     this.years = json.years;
-        // });
+        setTimeout(() => {
+            this.changeCalender();
+        });
     }
 
     ngAfterViewInit() {
@@ -147,12 +128,6 @@ export class CalendarComponent {
             this.renderer.appendChild(dayDiv, dateSpan);
             this.renderer.appendChild(calendar, dayDiv);
         }
-
-        // console.log(firstDayOfWeek, lastDate);
-        // console.log(this.year, this.month);
-
-        // this.appendOverview("20231103", "hogehogehogehogehogehogehogehogehogehoge");
-        // this.appendOverview("20231103", "ほげほげほげほげほげほげほげほげほげほげほげ");
     }
 
     private appendOverview(yyyymmdd: string, str: string) {
@@ -167,18 +142,10 @@ export class CalendarComponent {
 
     changeCalender() {
         console.log('CalendarComponent#changeCalendar', this.year, this.month);
-        // this.calendarContainer.nativeElement.innerHTML = '';
         this.ngAfterViewInit();
-
-        this.yearAndMonthChanged.emit({ year: this.year, month: this.month });
         this.router.navigate([`diary/${this.year}/${this.month}`]);
 
-        // this.router.navigate([`diary/${this.year}/${this.month}`]).then(()=>{
-        //     window.location.reload();
-        // });
-        // this.router.navigateByUrl(`/`, { skipLocationChange: true }).then(() => {
-        //     this.router.navigate([`diary/${this.year}/${this.month}`]);
-        // });
+        this.fetchDiary({ year: this.year, month: this.month });
     }
 
     prevMonth() {
@@ -195,5 +162,51 @@ export class CalendarComponent {
         this.month = ('0' + (next.getMonth() + 1)).slice(-2);
 
         this.changeCalender();
+    }
+
+    fetchDiary(param: any) {
+        console.log('DiaryPageComponent#fetchDiary', param);
+        const api = this.apiUrl + '/' + param.year + '/' + param.month;
+
+        this.http.get(api, { responseType: 'text' }).subscribe({
+            next: (html) => {
+                // TODO: can't work regex back ref in safari
+                // divide diaries per day
+                const diaries = html.split(/(?<=<\/diary>)/g);
+
+                const diaryInfos: DiaryInfo[] = [];
+                for (let diary of diaries) {
+                    // identify the date
+                    const regexDate = diary.match(/<diary year="(\d{4})" month="(\d{2})" day="(\d{2})" dow="(.)"/)!;
+                    const diaryInfo: DiaryInfo = {
+                        date: regexDate[1] + regexDate[2] + regexDate[3],
+                        year: regexDate[1],
+                        month: regexDate[2],
+                        day: regexDate[3],
+                        dow: regexDate[4],
+                        diary: diary,
+                    };
+                    diaryInfos.push(diaryInfo);
+
+                    // find headings per day and show on calendar.
+                    const regexHeadings: RegExpMatchArray = diary.match(/<h2>.*?<\/h2>/g)!;
+                    let headings: string[] = [];
+                    if (regexHeadings) {
+                        headings = regexHeadings.map((s) => {
+                            return s.replace('<h2>', '').replace('</h2>', '');
+                        });
+                    } else {
+                        headings.push(' ');
+                    }
+                    headings.forEach((heading) => {
+                        this.appendOverview(diaryInfo.date, heading);
+                    });
+                }
+                this.diaryFetched.emit(diaryInfos);
+            },
+            error: (err) => {
+                console.log('エラー！！！', err);
+            },
+        });
     }
 }

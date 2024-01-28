@@ -1,9 +1,8 @@
-<app-calendar [year]="year" [month]="month" [diaryInfos]="diaryInfos" (yearAndMonthChanged)="fetchDiary($event)"></app-calendar>
+<app-calendar (diaryFetched)="diaryInfos = $event"></app-calendar>
 
 <ng-container *ngIf="diaryInfos.length > 0">
     <app-diary *ngFor="let diaryInfo of diaryInfos" [diaryInfo]="diaryInfo"></app-diary>
 </ng-container>
-
 <ng-container *ngIf="diaryInfos.length == 0">
     <h1>Diary Not Found</h1>
 </ng-container>
