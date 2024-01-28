@@ -1,6 +1,6 @@
 <div class="calendar">
     <div class="calendar__header">
-        <a href="">先月</a>
+        <a (click)="prevMonth()">先月</a>
         <div class="calendar__year-and-month">
             <div class="calendar__selectbox">
                 <select [(ngModel)]="year" (change)="changeCalender()">
@@ -24,7 +24,7 @@
                 </select>
             </div>
         </div>
-        <a href="">次月</a>
+        <a (click)="nextMonth()">次月</a>
     </div>
     <div #calendarContainer class="calendar__container"></div>
 </div>

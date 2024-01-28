@@ -1,1 +1,10 @@
-<p>search-page works!</p>
+<ng-container *ngIf="results.length > 0">
+    検索結果：{{ results.length }}件見つかりました。
+    <div *ngFor="let result of results">
+        <h3 (click)="jump(result.year, result.month, result.day)">{{ result.year }}年{{ result.month }}月{{ result.day }}日({{ result.dow }})</h3>
+        <div>{{ result.hitline }}</div>
+        <hr />
+    </div>
+</ng-container>
+
+<ng-container *ngIf="results.length == 0"> 検索結果がありません。</ng-container>

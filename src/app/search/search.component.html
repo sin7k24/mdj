@@ -1,0 +1,6 @@
+<div class="searchDiv">
+    <button aria-label="検索"></button>
+    <label>
+        <input type="text" [(ngModel)]="words" (keypress)="search($event)" placeholder="検索キーワード" />
+    </label>
+</div>
