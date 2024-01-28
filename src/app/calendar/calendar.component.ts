@@ -18,22 +18,20 @@ export class CalendarComponent {
     @Output() diaryFetched = new EventEmitter();
 
     // selected year
-    year!: string;
+    year: string = '';
 
     // selected month
-    month!: string;
+    month: string = '';
 
     // selectable years list
-    years!: string[];
+    years: string[] = [];
 
     constructor(
         private http: HttpClient,
         private renderer: Renderer2,
         private route: ActivatedRoute,
         private router: Router
-    ) {
-        this.years = [];
-    }
+    ) {}
 
     ngOnInit() {
         // TODO: enable config
@@ -52,15 +50,16 @@ export class CalendarComponent {
         // If year and month were not specified
         this.year = this.year.length == 0 ? now.getFullYear().toString() : this.year;
         this.month = this.month.length == 0 ? '0' + (now.getMonth() + 1).toString().slice(-2) : this.month;
-
-        console.log('CalendarComponent#ngOnInit 2', this.year, this.month);
-        setTimeout(() => {
-            this.changeCalender();
-        });
     }
 
     ngAfterViewInit() {
-        console.log('CalendarComponent#ngAfterViewInit');
+        this.buildCalendar();
+
+        console.log('CalendarComponent#ngAfterViewInit', this.year, this.month);
+        this.changeCalender();
+    }
+
+    buildCalendar() {
         const calendar = this.calendarContainer.nativeElement;
         calendar.innerHTML = '';
 
@@ -70,7 +69,7 @@ export class CalendarComponent {
 
         const days = ['日', '月', '火', '水', '木', '金', '土'];
 
-        // render day of week
+        // Render day of week
         for (let day of days) {
             const dayDiv = this.renderer.createElement('div');
             this.renderer.addClass(dayDiv, 'calendar__day-of-week');
@@ -81,7 +80,7 @@ export class CalendarComponent {
 
         let columnNum = 0;
 
-        // render previouse month days
+        // Render previouse month days
         for (let i = firstDayOfWeek - 1; i >= 0; i--) {
             const date = new Date(Number(this.year), Number(this.month) - 1, -i).getDate();
             const dayDiv = this.renderer.createElement('div');
@@ -94,7 +93,7 @@ export class CalendarComponent {
             columnNum++;
         }
 
-        // render monthly days
+        // Render monthly days
         for (let i = 1; i <= lastDate; i++) {
             const dayDiv = this.renderer.createElement('div');
             this.renderer.addClass(dayDiv, 'calendar__day');
@@ -117,7 +116,7 @@ export class CalendarComponent {
             columnNum++;
         }
 
-        // render next month days
+        // Render next month days
         const nextMonthLeft = 7 - (columnNum % 7);
         for (let i = 1; i <= nextMonthLeft; i++) {
             const dayDiv = this.renderer.createElement('div');
@@ -130,7 +129,7 @@ export class CalendarComponent {
         }
     }
 
-    private appendOverview(yyyymmdd: string, str: string) {
+    appendOverview(yyyymmdd: string, str: string) {
         const overviewDiv = this.calendarContainer.nativeElement.querySelector(`#overview-${yyyymmdd} div`);
         this.renderer.addClass(overviewDiv.parentNode, 'calendar__day--fill');
         const overviewP = this.renderer.createElement('p');
@@ -138,14 +137,6 @@ export class CalendarComponent {
 
         overviewP.appendChild(overviewText);
         overviewDiv.appendChild(overviewP);
-    }
-
-    changeCalender() {
-        console.log('CalendarComponent#changeCalendar', this.year, this.month);
-        this.ngAfterViewInit();
-        this.router.navigate([`diary/${this.year}/${this.month}`]);
-
-        this.fetchDiary({ year: this.year, month: this.month });
     }
 
     prevMonth() {
@@ -164,19 +155,28 @@ export class CalendarComponent {
         this.changeCalender();
     }
 
+    changeCalender() {
+        console.log('CalendarComponent#changeCalendar', this.year, this.month);
+        // this.ngAfterViewInit();
+        this.buildCalendar();
+        this.router.navigate([`diary/${this.year}/${this.month}`]);
+
+        this.fetchDiary({ year: this.year, month: this.month });
+    }
+
     fetchDiary(param: any) {
         console.log('DiaryPageComponent#fetchDiary', param);
         const api = this.apiUrl + '/' + param.year + '/' + param.month;
 
         this.http.get(api, { responseType: 'text' }).subscribe({
             next: (html) => {
-                // TODO: can't work regex back ref in safari
-                // divide diaries per day
+                // TODO: Can't work regex back ref in safari
+                // Divide diaries per day
                 const diaries = html.split(/(?<=<\/diary>)/g);
 
                 const diaryInfos: DiaryInfo[] = [];
                 for (let diary of diaries) {
-                    // identify the date
+                    // Identify the date
                     const regexDate = diary.match(/<diary year="(\d{4})" month="(\d{2})" day="(\d{2})" dow="(.)"/)!;
                     const diaryInfo: DiaryInfo = {
                         date: regexDate[1] + regexDate[2] + regexDate[3],
@@ -188,7 +188,7 @@ export class CalendarComponent {
                     };
                     diaryInfos.push(diaryInfo);
 
-                    // find headings per day and show on calendar.
+                    // Find headings per day and show on calendar.
                     const regexHeadings: RegExpMatchArray = diary.match(/<h2>.*?<\/h2>/g)!;
                     let headings: string[] = [];
                     if (regexHeadings) {
@@ -206,6 +206,7 @@ export class CalendarComponent {
             },
             error: (err) => {
                 console.log('エラー！！！', err);
+                this.diaryFetched.emit([]);
             },
         });
     }

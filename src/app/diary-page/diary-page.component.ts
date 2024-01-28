@@ -28,15 +28,9 @@ export interface DiaryInfo {
 })
 export class DiaryPageComponent {
     // array of diary information per day
-    diaryInfos: DiaryInfo[];
+    diaryInfos: DiaryInfo[] = [];
 
-
-    constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
-        this.diaryInfos = [];
-    }
-
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     ngAfterViewChecked() {
         console.log('DiaryPageComponent#ngAfterViewChecked()');
