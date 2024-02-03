@@ -1,3 +1,13 @@
-<h1 id="{{ diaryInfo.date }}">{{ diaryInfo.year }}年{{ diaryInfo.month }}月{{ diaryInfo.day }}日（{{ diaryInfo.dow }}）</h1>
+<div class="diary">
+    <div class="diary__header">
+        <h1 id="{{ diaryInfo.date }}">
+            {{ diaryInfo.year }}年{{ diaryInfo.month }}月{{ diaryInfo.day }}日（{{ diaryInfo.dow }}）
+        </h1>
 
-<div [innerHTML]="diaryInfo.diary"></div>
+        <div class="diary__toolbar">
+            <span class="material-icons" (click)="edit()">edit</span>
+            <span class="material-icons" (click)="toTop()">vertical_align_top</span>
+        </div>
+    </div>
+    <div [innerHTML]="diaryInfo.diary"></div>
+</div>
