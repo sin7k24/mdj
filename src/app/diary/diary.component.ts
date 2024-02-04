@@ -10,16 +10,13 @@ import { Router } from '@angular/router';
 export class DiaryComponent {
     @Input() diaryInfo!: DiaryInfo;
 
-    constructor(private router: Router) {
-
-    }
+    constructor(private router: Router) {}
 
     edit() {
-        console.log("edit");
-        this.router.navigate(['edit']);
+        this.router.navigate([`edit/${this.diaryInfo.year}/${this.diaryInfo.month}/${this.diaryInfo.day}`]);
     }
 
     toTop() {
-        window.scrollTo({top: 0, behavior: 'smooth'});
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }

@@ -1,11 +1,21 @@
-.editor {
-    width: 100em;
-    height: 500px;
-    padding: 10px;
-    border: 1px solid black;
-    overflow-y: scroll;
+.edit__header {
+    display: flex;
+
+    span {
+        cursor: pointer;
+        margin-left: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
 }
 
-span {
-    cursor: pointer;
+.editor {
+    width: 100%;
+    height: 80vh;
+    padding: 10px;
+    border: 1px solid ffffFf;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    font-size: 14px;
 }
+

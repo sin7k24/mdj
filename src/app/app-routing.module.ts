@@ -9,7 +9,7 @@ const routes: Routes = [
     { path: 'diary/:year', component: DiaryPageComponent },
     { path: 'diary/:year/:month', component: DiaryPageComponent },
     { path: 'search', component: SearchPageComponent },
-    { path: 'edit', component: EditPageComponent },
+    { path: 'edit/:year/:month/:day', component: EditPageComponent },
 ];
 
 @NgModule({

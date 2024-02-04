@@ -1,17 +1,7 @@
-<select>
-    <option>2023</option>
-</select>
-<select>
-    <option>12</option>
-</select>
-<select [(ngModel)]="day" (change)="changeDate();">
-    <option value="01">1</option>
-    <option value="02">2</option>
-    <option value="03">3</option>
-    <option value="04">4</option>
-</select>
-
-<span class="material-icons" (click)="save()">save</span>
+<div class="edit__header">
+    <app-date-selector mode="date" (dateChanged)="readMarkdown($event)"></app-date-selector>
+    <span class="material-icons" (click)="saveMarkdown()">save</span>
+</div>
 
 <!-- <div class="editor" contenteditable="true" [textContent]="mdContent"></div> -->
 <textarea class="editor" contenteditable="true" [(ngModel)]="mdContent"></textarea>

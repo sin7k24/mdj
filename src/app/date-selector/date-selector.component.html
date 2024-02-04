@@ -1,1 +1,49 @@
-<p>date-selector works!</p>
+<div class="calendar__header">
+    <ng-container *ngIf="mode === 'month'">
+        <a (click)="prevMonth()">先月</a>
+    </ng-container>
+    <ng-container *ngIf="mode === 'date'">
+        <a (click)="prevDay()">前日</a>
+    </ng-container>
+
+    <div class="calendar__year-and-month">
+        <div class="calendar__selectbox">
+            <select [(ngModel)]="year" (change)="changeCalender()">
+                <option *ngFor="let year of years">{{ year }}</option>
+            </select>
+        </div>
+        <div class="calendar__selectbox">
+            <select [(ngModel)]="month" (change)="changeCalender()">
+                <option value="01">1</option>
+                <option value="02">2</option>
+                <option value="03">3</option>
+                <option value="04">4</option>
+                <option value="05">5</option>
+                <option value="06">6</option>
+                <option value="07">7</option>
+                <option value="08">8</option>
+                <option value="09">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+        </div>
+
+        <ng-container *ngIf="mode === 'date'">
+            <div class="calendar__selectbox">
+                <select [(ngModel)]="day" (change)="changeCalender()">
+                    <option [value]="('0' + (i + 1)).slice(-2)" *ngFor="let dummy of [].constructor(daysOfMonth); let i = index">
+                        {{ i + 1 }}
+                    </option>
+                </select>
+            </div>
+        </ng-container>
+    </div>
+
+    <ng-container *ngIf="mode === 'month'">
+        <a (click)="nextMonth()">次月</a>
+    </ng-container>
+    <ng-container *ngIf="mode === 'date'">
+        <a (click)="nextDay()">翌日</a>
+    </ng-container>
+</div>
