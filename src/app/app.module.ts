@@ -12,6 +12,7 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { FormsModule } from '@angular/forms';
 import { SearchComponent } from './search/search.component';
 import { HeaderComponent } from './header/header.component';
+import { DateSelectorComponent } from './date-selector/date-selector.component';
 
 @NgModule({
     declarations: [
@@ -23,6 +24,7 @@ import { HeaderComponent } from './header/header.component';
         CalendarComponent,
         SearchComponent,
         HeaderComponent,
+        DateSelectorComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
     providers: [],

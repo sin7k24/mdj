@@ -11,8 +11,8 @@
     <option value="04">4</option>
 </select>
 
-<i class="material-icons">save</i>
+<span class="material-icons" (click)="save()">save</span>
 
 <!-- <div class="editor" contenteditable="true" [textContent]="mdContent"></div> -->
-<textarea class="editor" contenteditable="true" [textContent]="mdContent"></textarea>
+<textarea class="editor" contenteditable="true" [(ngModel)]="mdContent"></textarea>
 
