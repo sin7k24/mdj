@@ -1,0 +1,18 @@
+.diary__header {
+    // background-color: black;
+    // opacity: 0.1;
+    
+    display: flex;
+    // border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+
+    .diary__toolbar {
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-left: auto;
+        span {
+            margin-right: 16px;
+            cursor: pointer;
+        }
+    }
+}
