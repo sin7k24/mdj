@@ -1,5 +1,6 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { DiaryInfo } from '../diary-page/diary-page.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-diary',
@@ -9,8 +10,13 @@ import { DiaryInfo } from '../diary-page/diary-page.component';
 export class DiaryComponent {
     @Input() diaryInfo!: DiaryInfo;
 
+    constructor(private router: Router) {
+
+    }
+
     edit() {
         console.log("edit");
+        this.router.navigate(['edit']);
     }
 
     toTop() {
