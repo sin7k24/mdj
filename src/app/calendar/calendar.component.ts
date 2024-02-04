@@ -17,15 +17,6 @@ export class CalendarComponent {
 
     @Output() diaryFetched = new EventEmitter();
 
-    // selected year
-    year: string = '';
-
-    // selected month
-    month: string = '';
-
-    // selectable years list
-    years: string[] = [];
-
     constructor(
         private http: HttpClient,
         private renderer: Renderer2,
@@ -34,38 +25,20 @@ export class CalendarComponent {
     ) {}
 
     ngOnInit() {
-        // TODO: enable config
-        const firstYear = 2005;
-        const now = new Date();
-        // years list
-        for (let i = now.getFullYear(); i >= firstYear; i--) {
-            this.years.push(i.toString());
-        }
-
-        // Get path parameter from ActivatedRoute
-        this.year = this.route.snapshot.paramMap.get('year') || '';
-        this.month = this.route.snapshot.paramMap.get('month') || '';
-        console.log('CalendarComponent#ngOnInit', this.year, this.month);
-
-        // If year and month were not specified
-        this.year = this.year.length == 0 ? now.getFullYear().toString() : this.year;
-        this.month = this.month.length == 0 ? '0' + (now.getMonth() + 1).toString().slice(-2) : this.month;
+        console.log('CalendarComponent#ngOnInit()');
     }
 
     ngAfterViewInit() {
-        this.buildCalendar();
-
-        console.log('CalendarComponent#ngAfterViewInit', this.year, this.month);
-        this.changeCalender();
+        console.log("CalendarComponent#ngAfterViewInit()");
     }
 
-    buildCalendar() {
+    buildCalendar(year: string, month: string) {
         const calendar = this.calendarContainer.nativeElement;
         calendar.innerHTML = '';
 
-        const firstDayOfWeek = new Date(Number(this.year), Number(this.month) - 1, 1).getDay();
+        const firstDayOfWeek = new Date(Number(year), Number(month) - 1, 1).getDay();
 
-        const lastDate = new Date(Number(this.year), Number(this.month), 0).getDate();
+        const lastDate = new Date(Number(year), Number(month), 0).getDate();
 
         const days = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -82,7 +55,7 @@ export class CalendarComponent {
 
         // Render previouse month days
         for (let i = firstDayOfWeek - 1; i >= 0; i--) {
-            const date = new Date(Number(this.year), Number(this.month) - 1, -i).getDate();
+            const date = new Date(Number(year), Number(month) - 1, -i).getDate();
             const dayDiv = this.renderer.createElement('div');
             this.renderer.addClass(dayDiv, 'calendar__other-month-day');
             const dateSpan = this.renderer.createElement('span');
@@ -97,11 +70,11 @@ export class CalendarComponent {
         for (let i = 1; i <= lastDate; i++) {
             const dayDiv = this.renderer.createElement('div');
             this.renderer.addClass(dayDiv, 'calendar__day');
-            this.renderer.setAttribute(dayDiv, 'id', `overview-${this.year}${this.month}${('0' + i).slice(-2)}`);
+            this.renderer.setAttribute(dayDiv, 'id', `overview-${year}${month}${('0' + i).slice(-2)}`);
             this.renderer.setAttribute(
                 dayDiv,
                 'onclick',
-                `window.scrollTo({top: document.getElementById(${this.year}${this.month}${('0' + i).slice(
+                `window.scrollTo({top: document.getElementById(${year}${month}${('0' + i).slice(
                     -2
                 )}).getBoundingClientRect().top, behavior: "smooth"})`
             );
@@ -139,33 +112,17 @@ export class CalendarComponent {
         overviewDiv.appendChild(overviewP);
     }
 
-    prevMonth() {
-        const prev = new Date(Number(this.year), Number(this.month) - 2);
-        this.year = prev.getFullYear().toString();
-        this.month = ('0' + (prev.getMonth() + 1)).slice(-2);
+    changeCalender(event: any) {
+        console.log('CalendarComponent#changeCalendar', event.year, event.month);
 
-        this.changeCalender();
-    }
+        this.buildCalendar(event.year, event.month);
+        this.router.navigate([`diary/${event.year}/${event.month}`]);
 
-    nextMonth() {
-        const next = new Date(Number(this.year), Number(this.month));
-        this.year = next.getFullYear().toString();
-        this.month = ('0' + (next.getMonth() + 1)).slice(-2);
-
-        this.changeCalender();
-    }
-
-    changeCalender() {
-        console.log('CalendarComponent#changeCalendar', this.year, this.month);
-        // this.ngAfterViewInit();
-        this.buildCalendar();
-        this.router.navigate([`diary/${this.year}/${this.month}`]);
-
-        this.fetchDiary({ year: this.year, month: this.month });
+        this.fetchDiary({ year: event.year, month: event.month });
     }
 
     fetchDiary(param: any) {
-        console.log('DiaryPageComponent#fetchDiary', param);
+        console.log('CalendarComponent#fetchDiary()', param);
         const api = this.apiUrl + '/' + param.year + '/' + param.month;
 
         this.http.get(api, { responseType: 'text' }).subscribe({

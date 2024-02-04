@@ -1,30 +1,4 @@
 <div class="calendar">
-    <div class="calendar__header">
-        <a (click)="prevMonth()">先月</a>
-        <div class="calendar__year-and-month">
-            <div class="calendar__selectbox">
-                <select [(ngModel)]="year" (change)="changeCalender()">
-                    <option *ngFor="let year of years">{{ year }}</option>
-                </select>
-            </div>
-            <div class="calendar__selectbox">
-                <select [(ngModel)]="month" (change)="changeCalender()">
-                    <option value="01">1</option>
-                    <option value="02">2</option>
-                    <option value="03">3</option>
-                    <option value="04">4</option>
-                    <option value="05">5</option>
-                    <option value="06">6</option>
-                    <option value="07">7</option>
-                    <option value="08">8</option>
-                    <option value="09">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                </select>
-            </div>
-        </div>
-        <a (click)="nextMonth()">次月</a>
-    </div>
+    <app-date-selector (dateChanged)="changeCalender($event)"></app-date-selector>
     <div #calendarContainer class="calendar__container"></div>
 </div>

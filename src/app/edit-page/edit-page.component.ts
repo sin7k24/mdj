@@ -7,22 +7,27 @@ import { Component } from '@angular/core';
     styleUrls: ['./edit-page.component.scss'],
 })
 export class EditPageComponent {
-    year = '2023';
-    month = '12';
-    day = '01';
+    year = '';
+    month = '';
+    day = '';
 
     mdContent = '';
 
     constructor(private http: HttpClient) {}
 
-    changeDate() {
-        this.http.get(`api/v1/md/${this.year}/${this.month}/${this.day}`, { responseType: 'text' }).subscribe((res) => {
+    readMarkdown(event: any) {
+        this.year = event.year;
+        this.month = event.month;
+        this.day = event.day;
+
+        console.log(event);
+        this.http.get(`api/v1/md/${event.year}/${event.month}/${event.day}`, { responseType: 'text' }).subscribe((res) => {
             console.log(res);
-            this.mdContent = res;
+            this.mdContent = res.length != 0 ? res : "まだ日記がありません";
         });
     }
 
-    save() {
+    saveMarkdown() {
         const body = {
             year: this.year,
             month: this.month,
