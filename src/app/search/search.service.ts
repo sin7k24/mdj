@@ -14,7 +14,7 @@ export class SearchService {
         const body = {
             words: words,
         };
-        this.http.post('api/v1/grep', body).subscribe((results) => {
+        this.http.post('api/v1/search', body).subscribe((results) => {
             console.log(results);
             this.resultChanged.next(results);
         });
