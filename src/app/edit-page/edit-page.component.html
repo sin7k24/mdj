@@ -4,5 +4,5 @@
 </div>
 
 <!-- <div class="editor" contenteditable="true" [textContent]="mdContent"></div> -->
-<textarea class="editor" contenteditable="true" [(ngModel)]="mdContent"></textarea>
+<textarea #editor (dragover)="dragOver($event)" (drop)="drop($event)" class="editor" contenteditable="true" [(ngModel)]="mdContent"></textarea>
 
