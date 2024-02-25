@@ -2,5 +2,10 @@
     "/api/v1": {
       "target": "http://localhost:3000",
       "pathRewrite": {"^/api/v1": "/api/v1"}
+    },
+    "/img": {
+      "target": "http://localhost:3000",
+      "pathRewrite": {"^/img": "/img"}
     }
+
   }
