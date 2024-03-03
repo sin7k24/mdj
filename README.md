@@ -1,7 +1,6 @@
 # Mdj
 
-Under construction.  
-Diary tool using markdown for personal use.
+A tool for writing a personal web diary using Markdown.
 
 ## Structure
 
