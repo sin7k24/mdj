@@ -140,7 +140,7 @@ export class CalendarComponent {
                         year: regexDate[1],
                         month: regexDate[2],
                         day: regexDate[3],
-                        dow: regexDate[4],
+                        dow: Number(regexDate[4]),
                         diary: diary,
                     };
                     diaryInfos.push(diaryInfo);

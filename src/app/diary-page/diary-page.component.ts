@@ -17,7 +17,7 @@ export interface DiaryInfo {
     year: string;
     month: string;
     day: string;
-    dow: string;
+    dow: number;
     diary: string;
 }
 
