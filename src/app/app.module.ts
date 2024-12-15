@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { SearchComponent } from './search/search.component';
 import { HeaderComponent } from './header/header.component';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
+import { ConfigPageComponent } from './config-page/config-page.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
         SearchComponent,
         HeaderComponent,
         DateSelectorComponent,
+        ConfigPageComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
     providers: [],

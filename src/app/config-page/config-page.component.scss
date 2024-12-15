@@ -1,0 +1,40 @@
+.config {
+    margin: 15px;
+}
+
+.textbox-1-label, .textbox-1 {
+    color: #333;
+}
+
+.textbox-1-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: .9em;
+}
+
+.textbox-1 {
+    // width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #969da3;
+    border-radius: 3px;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-1::placeholder {
+    color: #999;
+}
+
+button {
+    display: block;
+    width: 100px;
+    margin: 10px 20px;
+    padding: 5px 0;
+    // margin: auto;
+    background: #272822;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 0.3rem;
+    cursor: pointer;
+}

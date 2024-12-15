@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DiaryPageComponent } from './diary-page/diary-page.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
+import { ConfigPageComponent } from './config-page/config-page.component';
 
 const routes: Routes = [
     { path: 'diary', component: DiaryPageComponent },
@@ -10,6 +11,7 @@ const routes: Routes = [
     { path: 'diary/:year/:month', component: DiaryPageComponent },
     { path: 'search', component: SearchPageComponent },
     { path: 'edit/:year/:month/:day', component: EditPageComponent },
+    { path: 'config', component: ConfigPageComponent }
 ];
 
 @NgModule({
