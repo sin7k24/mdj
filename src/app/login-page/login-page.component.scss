@@ -1,0 +1,39 @@
+.loginpage {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    // if want to centering by browser height.
+    // height: 100vh;
+}
+
+.loginpage__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+p {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+input {
+    display: block;
+    outline: none;
+    height: 50px;
+    width: 300px;
+    margin-top: 10px;
+    border: none;
+    border-bottom: 2px solid #0066ff;
+}
+
+button {
+    display: block;
+    height: 50px;
+    margin-top: 20px;
+    background-color: #272822;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

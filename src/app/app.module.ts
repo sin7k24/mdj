@@ -14,6 +14,7 @@ import { SearchComponent } from './search/search.component';
 import { HeaderComponent } from './header/header.component';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { ConfigPageComponent } from './config-page/config-page.component';
+import { LoginPageComponent } from './login-page/login-page.component';
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import { ConfigPageComponent } from './config-page/config-page.component';
         HeaderComponent,
         DateSelectorComponent,
         ConfigPageComponent,
+        LoginPageComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
     providers: [],

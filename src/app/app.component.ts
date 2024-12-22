@@ -15,6 +15,13 @@ export class AppComponent {
     constructor(private router: Router, private http: HttpClient) {}
 
     ngOnInit() {
+        const loginId = sessionStorage.getItem('login.id');
+        console.log(loginId);
+        if (!loginId) {
+            this.router.navigate(['/login']);
+            return;
+        }
+
         this.http.get(this.apiUrl, { responseType: 'text' }).subscribe({
             next: (html) => {
                 this.router.navigate(['/diary']);
