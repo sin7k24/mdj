@@ -12,6 +12,10 @@ export class DiaryComponent {
 
     constructor(private router: Router) {}
 
+    ngOnInit() {
+        console.log("-------");
+        console.log(this.diaryInfo.diary);
+    }
     edit() {
         this.router.navigate([`edit/${this.diaryInfo.year}/${this.diaryInfo.month}/${this.diaryInfo.day}`]);
     }

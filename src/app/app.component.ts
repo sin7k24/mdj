@@ -20,17 +20,19 @@ export class AppComponent {
         if (!loginId) {
             this.router.navigate(['/login']);
             return;
+        }else{
+            this.router.navigate(['/diary']);            
         }
 
-        this.http.get(this.apiUrl, { responseType: 'text' }).subscribe({
-            next: (html) => {
-                this.router.navigate(['/diary']);
-            },
-            error: (err) => {
-                // this.router.navigate(['/config']);
-                console.log(err);
-            },
-        });
+        // this.http.get(this.apiUrl, { responseType: 'text' }).subscribe({
+        //     next: (html) => {
+        //         this.router.navigate(['/diary']);
+        //     },
+        //     error: (err) => {
+        //         // this.router.navigate(['/config']);
+        //         console.log(err);
+        //     },
+        // });
     }
 
     public moveToDiaryPage() {

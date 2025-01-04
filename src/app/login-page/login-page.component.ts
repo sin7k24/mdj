@@ -13,13 +13,21 @@ export class LoginPageComponent {
   constructor(
     private http: HttpClient,
     private router: Router
-  ) { 
-    
+  ) {
+
   }
 
   login() {
+    this.http.get('api/v1/users?id=nakanishi7&password=hoge111',).subscribe({
+      next: (res) => {
+        sessionStorage.setItem('login.id', 'test');
+        this.router.navigate(['/diary']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
 
-    sessionStorage.setItem('login.id', 'test');
-    location.href = '/';
+    // location.href = '/';
   }
 }
